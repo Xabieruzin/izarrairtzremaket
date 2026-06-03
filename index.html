@@ -1066,6 +1066,51 @@
 
             counter.innerText = (carousels[id] + 1) + " / " + slides.length;
         }
+		function setLanguage(lang) {
+    const body = document.body;
+    const btnEu = document.getElementById('btn-eu');
+    const btnEs = document.getElementById('btn-es');
+    const btnEn = document.getElementById('btn-en');
+
+    document.documentElement.lang = lang;
+
+    // Limpiar clases de idioma anteriores
+    body.classList.remove('is-es', 'is-en');
+    btnEu.setAttribute('aria-pressed', 'false');
+    btnEs.setAttribute('aria-pressed', 'false');
+    btnEn.setAttribute('aria-pressed', 'false');
+
+    if (lang === 'es') {
+        body.classList.add('is-es');
+        btnEs.setAttribute('aria-pressed', 'true');
+    } else if (lang === 'en') {
+        body.classList.add('is-en');
+        btnEn.setAttribute('aria-pressed', 'true');
+    } else {
+        // Euskera por defecto
+        btnEu.setAttribute('aria-pressed', 'true');
+    }
+
+    // Opcional: Actualiza la URL del navegador sin recargar la página 
+    // para que si el usuario cambia de botón, el enlace cambie solo.
+    const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?lang=' + lang;
+    window.history.pushState({ path: newUrl }, '', newUrl);
+}
+
+// Ejecutar automáticamente cuando cualquier persona abra la página
+window.addEventListener('DOMContentLoaded', () => {
+    // Leer el parámetro '?lang=...' de la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const langParam = urlParams.get('lang');
+
+    if (langParam) {
+        // Si el enlace tiene un idioma específico (?lang=es), lo cargamos
+        setLanguage(langParam);
+    } else {
+        // Si entran al enlace limpio, ponemos el idioma por defecto (Euskera)
+        setLanguage('eu');
+    }
+});
     </script>
 </body>
 </html>
